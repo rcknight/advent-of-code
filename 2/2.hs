@@ -27,8 +27,10 @@ keypad2 = ["       ",
 keypad2Start :: Position
 keypad2Start = (1,3)
 
+
 getKey :: [[Char]] -> Position -> Char
 getKey pad (x,y) = pad !! y !! x
+
 
 move :: [[Char]] -> Char -> Position -> Position
 move pad m pos =
@@ -43,7 +45,9 @@ move pad m pos =
         move' 'R' (x,y) = (x + 1, y)
     in
         if content == ' ' then pos else newPos
-    
+
+
+getKeySequence :: [[Char]] -> Position -> String -> String
 getKeySequence pad initialPos movements =
         snd result
     where
