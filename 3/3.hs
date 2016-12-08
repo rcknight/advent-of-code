@@ -16,6 +16,15 @@ parseInput = (map (map read)) . (map words) . lines
 process :: [[Int]] -> Int
 process input = length $ filter id $ map isValidTriangle input
 
-main = do
+chunks :: Int -> [a] -> [[a]]
+chunks _ [] = []
+chunks len xs = (take len xs) : chunks len (drop len xs)
+
+part1 = do
     contents <- readFile "day3input.txt"
     print $ process $ parseInput contents
+    
+part2 = do
+    contents <- readFile "day3input.txt"
+    print $ process $ chunks 3 $ concat $ transpose $ parseInput contents
+
