@@ -38,9 +38,8 @@ move pad m pos =
         newPos = move' m pos
         content = getKey pad newPos
 
-        move' :: Char -> Position -> Position
-        move' 'U' (x,y) = (x,y - 1)
-        move' 'D' (x,y) = (x,y + 1)
+        move' 'U' (x,y) = (x, y - 1)
+        move' 'D' (x,y) = (x, y + 1)
         move' 'L' (x,y) = (x - 1, y)
         move' 'R' (x,y) = (x + 1, y)
     in
