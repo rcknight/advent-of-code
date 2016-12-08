@@ -18,7 +18,7 @@ readRoom s =
         nameAndSector = split (condense . dropDelims $ oneOf("-")) (bracketSplit !! 0)
     in 
         Room { 
-            name = concat $ take ((length nameAndSector) - 1) nameAndSector,
+            name = concat $ intersperse "-" $ take ((length nameAndSector) - 1) nameAndSector,
             sectorId = read $ last nameAndSector,
             checksum = bracketSplit !! 1 
         }
@@ -32,7 +32,6 @@ orderLetters c1 c2 =
             EQ -> compare c1 c2
             _ -> lengthComparison
 
-
 doChecksum :: String -> String
 doChecksum s =
         take 5 $ map head $ sortBy orderLetters $ group $ sort $ filter isAlpha s
@@ -40,8 +39,28 @@ doChecksum s =
 isValid :: Room -> Bool
 isValid r = doChecksum (name r) == checksum r
 
+decryptName :: Room -> String
+decryptName r = 
+    let
+        words = split (condense . dropDelims $ oneOf("-")) (name r)
+        sector = sectorId r
+        decryptWord = map (shiftChar sector)
+    in
+        unwords $ map decryptWord words  
+
+shiftChar :: Int -> Char -> Char
+shiftChar shift c = chr ((((ord c) - 97 + shift) `mod` 26) + 97)
+
 part1 = do
     contents <- readFile "day4input.txt"
     let rooms = map readRoom $ lines contents
     let validRooms = filter isValid rooms
     print $ sum $ map sectorId validRooms
+
+part2 = do
+    contents <- readFile "day4input.txt"
+    let rooms = map readRoom $ lines contents
+    let validRooms = filter isValid rooms
+    let decryptedRooms = map (\r -> (sectorId r, decryptName r)) validRooms
+    let northRooms = filter (\r -> isSubsequenceOf "northpole" (snd r)) decryptedRooms
+    print $ head northRooms
