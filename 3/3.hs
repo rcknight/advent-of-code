@@ -17,5 +17,5 @@ process :: [[Int]] -> Int
 process input = length $ filter id $ map isValidTriangle input
 
 main = do
-    contents <- readFile "input.txt"
-    print contents
+    contents <- readFile "day3input.txt"
+    print $ process $ parseInput contents
